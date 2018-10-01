@@ -2,9 +2,10 @@
 $fn=82*4;       // Smooth cylinders
 
 OuterRadius       = 84.90 / 2; // These are the desired dimensions and may need to be measured and adjusted as above      
-InnerRadius       = 80.0 / 2; // These are the desired dimensions and may need to be measured and adjusted as above      
+InnerRadius       = 80.2                 / 2; // These are the desired dimensions and may need to be measured and adjusted as above      
 
-Height            = 6.0;       // The height of the housings gearing.
+Height            = 6.0;       // The height of the housings gear ring.
+GearHeight        = 8.0;       // The height of the housings gears.
 InnerCutoutHeight = 2.5;       // The cutout dimensions suit 2.62mm OD o-ring material for grip surface.         
 InnerCutoutDepth  = 2.4;       // See cutout height above.        
 NumberOfTeeth     = 82;        // Copied from a purchased Canon 17-40mm ring gear.
@@ -26,16 +27,16 @@ union()
     // Top Grasp Ring Bevel
     rotate_extrude(angle=360,convexity=10)
       polygon(points = [
-        [1+CorrectedInnerRadius+1.5*GearWallThickness,Height-GearWallThickness],
-        [1+CorrectedInnerRadius+0.7*GearWallThickness,Height],
-        [1+CorrectedInnerRadius+1.5*GearWallThickness,Height]]
+        [1+CorrectedInnerRadius+1.0*GearWallThickness,Height-GearWallThickness],
+        [1+CorrectedInnerRadius+0.5*GearWallThickness,Height],
+        [1+CorrectedInnerRadius+1.0*GearWallThickness,Height]]
       );
     // bottom Grasp Ring Bevel
     rotate_extrude(angle=360,convexity=10)
       polygon(points = [
-        [1+CorrectedInnerRadius+1.5*GearWallThickness,GearWallThickness],
-        [1+CorrectedInnerRadius+0.7*GearWallThickness,0],
-        [1+CorrectedInnerRadius+1.5*GearWallThickness,0]]
+        [1+CorrectedInnerRadius+1.0*GearWallThickness,GearWallThickness],
+        [1+CorrectedInnerRadius+0.5*GearWallThickness,0],
+        [1+CorrectedInnerRadius+1.0*GearWallThickness,0]]
       );
   }
   // Gear Ring
@@ -44,16 +45,16 @@ union()
     //Gear Ring Positioning  
     translate([0,0,Height*1.5])
     {
-      gear(m = OuterCorrection, z = NumberOfTeeth, x = 0, h = Height, w = 20, clearance = 0.1, center = true);
+      gear(m = OuterCorrection, z = NumberOfTeeth, x = 0, h = GearHeight, w = 20, clearance = 0.1, center = true);
     }
     // Gear Ring Lens Clearance     
-    cylinder(r = CorrectedInnerRadius, h = 2*Height);
+    cylinder(r = CorrectedInnerRadius, h = 2*GearHeight);
     // Bottom Gear Teeth Bevel
     rotate_extrude(angle=360,convexity=10)
       polygon(points = [
-        [CorrectedOuterRadius-ToothBevelWidth,2*Height],
-        [CorrectedOuterRadius,2*Height],
-        [CorrectedOuterRadius,2*Height-ToothBevelWidth]]
+        [CorrectedOuterRadius-ToothBevelWidth,1.5*Height+GearHeight/2],
+        [CorrectedOuterRadius,1.5*Height+GearHeight/2],
+        [CorrectedOuterRadius,1.5*Height+GearHeight/2-ToothBevelWidth]]
       );
   }
 }
@@ -63,7 +64,7 @@ difference()
 {
   difference()
   {
-    cylinder(r = CorrectedInnerRadius+GearWallThickness+1.0,h = Height);
+    cylinder(r = CorrectedInnerRadius+GearWallThickness+0.2,h = Height);
     cylinder(r = CorrectedInnerRadius, h = Height);
   }
   *translate([0,0,(Height-InnerCutoutHeight)/2])
